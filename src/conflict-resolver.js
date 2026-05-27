@@ -41,6 +41,7 @@ export function resolveConflict(localAction, serverData) {
  * @returns {boolean}
  */
 export function isDuplicate(pendingActions, type, payload) {
+  if (!Array.isArray(pendingActions)) return false;
   return pendingActions.some(
     (action) =>
       action.type === type &&
@@ -54,8 +55,9 @@ export function isDuplicate(pendingActions, type, payload) {
  * @returns {Array} - Deduplicated actions (latest GPS only)
  */
 export function mergeGPSUpdates(actions) {
-  const gpsActions = actions.filter((a) => a.type === 'gps');
-  const otherActions = actions.filter((a) => a.type !== 'gps');
+  if (!Array.isArray(actions)) return [];
+  const gpsActions = actions.filter((a) => a && a.type === 'gps');
+  const otherActions = actions.filter((a) => !a || a.type !== 'gps');
 
   if (gpsActions.length === 0) return actions;
 
