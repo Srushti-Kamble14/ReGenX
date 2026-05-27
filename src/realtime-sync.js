@@ -30,11 +30,12 @@ let connected = false;
 let clientId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 function normalizeRoomList(rooms = []) {
+  if (!Array.isArray(rooms)) return [];
   return Array.from(new Set(rooms.filter(Boolean)));
 }
 
 function inferRoomsFromKey(key) {
-  if (!key) return [NETWORK_ROOM];
+  if (typeof key !== 'string') return [NETWORK_ROOM];
   if (key.startsWith(`${STORAGE_PREFIX}ord:`)) return [NETWORK_ROOM, ROOM_NAMES.provider, ROOM_NAMES.rider, ROOM_NAMES.plant, ROOM_NAMES.admin];
   if (key.startsWith(`${STORAGE_PREFIX}acc:`)) return [NETWORK_ROOM, ROOM_NAMES.admin];
   if (key.startsWith(`${STORAGE_PREFIX}iot-bins`)) return [NETWORK_ROOM, ROOM_NAMES.provider, ROOM_NAMES.plant];
