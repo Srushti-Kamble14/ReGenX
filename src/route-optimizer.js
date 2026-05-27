@@ -16,14 +16,19 @@ export const RouteOptimizer = {
      * @returns {Object} Optimized sequence of jobs and travel statistics.
      */
     optimizeRoute: (startPoint, jobs) => {
-        if (!jobs || jobs.length === 0) {
+        if (!startPoint || typeof startPoint.lat !== 'number' || typeof startPoint.lng !== 'number') {
+            return { optimizedJobs: jobs || [], originalDistance: 0, optimizedDistance: 0, savingsKm: 0, co2SavedKg: 0 };
+        }
+
+        const validJobs = (jobs || []).filter(j => j && typeof j.providerLat === 'number' && typeof j.providerLng === 'number');
+        if (validJobs.length === 0) {
             return { optimizedJobs: [], originalDistance: 0, optimizedDistance: 0, savingsKm: 0, co2SavedKg: 0 };
         }
 
-        if (jobs.length === 1) {
-            const singleDist = RouteOptimizer.calculateDistance(startPoint.lat, startPoint.lng, jobs[0].providerLat, jobs[0].providerLng);
+        if (validJobs.length === 1) {
+            const singleDist = RouteOptimizer.calculateDistance(startPoint.lat, startPoint.lng, validJobs[0].providerLat, validJobs[0].providerLng);
             return { 
-                optimizedJobs: jobs, 
+                optimizedJobs: validJobs, 
                 originalDistance: singleDist, 
                 optimizedDistance: singleDist, 
                 savingsKm: 0, 
@@ -32,7 +37,7 @@ export const RouteOptimizer = {
         }
 
         // 1. Build Distance Matrix (including starting point as index 0)
-        const points = [startPoint, ...jobs.map(j => ({ lat: j.providerLat, lng: j.providerLng }))];
+        const points = [startPoint, ...validJobs.map(j => ({ lat: j.providerLat, lng: j.providerLng }))];
         const n = points.length;
         const distMatrix = Array.from({ length: n }, () => Array(n).fill(0));
 
@@ -93,7 +98,7 @@ export const RouteOptimizer = {
 
         // Convert optimized tour indices back to jobs list
         // Exclude the starting point (index 0) from the jobs output list
-        const optimizedJobs = tour.slice(1).map(idx => jobs[idx - 1]);
+        const optimizedJobs = tour.slice(1).map(idx => validJobs[idx - 1]);
 
         const savingsKm = Math.max(0, originalDistance - bestDist);
         // Standard diesel logistics vehicle emits ~0.25kg of CO2 per km saved
