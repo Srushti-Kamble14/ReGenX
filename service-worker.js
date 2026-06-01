@@ -25,6 +25,7 @@ const STATIC_ASSETS = [
   '/src/vision-scanner.js',
   '/src/esg-reporter.js',
   '/src/cloud-sync.js',
+  '/src/offline-sync.js',
   '/src/accessibility.js',
   '/src/i18n.js',
   '/icons/icon-72x72.png',
