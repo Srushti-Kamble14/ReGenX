@@ -13,6 +13,7 @@ Please include:
 - A clear description of the issue
 - Steps to reproduce
 - Potential impact
+- Redacted logs only; do not include live API keys, tokens, or credentials
 - Any suggested remediation
 
 We will acknowledge receipt within 72 hours and provide a remediation timeline when possible.
