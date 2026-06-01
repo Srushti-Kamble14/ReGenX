@@ -27,7 +27,7 @@ window.BioScanner = (function () {
     'meat', 'chicken', 'beef', 'pork', 'fish', 'egg', 'cheese',
     'cake', 'cookie', 'muffin', 'brownie', 'donut', 'pastry',
     'leaf', 'leaves', 'grass', 'plant', 'flower', 'herb',
-    'compost', 'organic', 'vegetable', 'fruit', 'garden'
+    'compost', 'organic', 'vegetable', 'fruit', 'garden', 'coffee grounds'
   ];
 
   // MobileNet classes that are INORGANIC / NOT suitable for biogas
